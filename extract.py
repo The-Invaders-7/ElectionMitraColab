@@ -20,10 +20,8 @@ RESULT_PATH = ".\\static\\FILES\\RESULTS"
 rcParams['figure.figsize'] = 16, 32
 reader = easyocr.Reader(['hi', 'en'])
 
-'''
 
 # Store Pdf with convert_from_path function
-
 for file_name in os.listdir(PROCESSING_FILE_PATH):
     
     file_path = os.path.join(PROCESSING_FILE_PATH, file_name)
@@ -37,7 +35,6 @@ for file_name in os.listdir(PROCESSING_FILE_PATH):
     # move file to processed folder
     new_file_path = os.path.join(PROCESSED_FILE_PATH, file_name)
     shutil.move(file_path, new_file_path)
-'''
 
 for image_name in os.listdir(PROCESSING_IMG_PATH):
     
@@ -68,11 +65,7 @@ for image_name in os.listdir(PROCESSING_IMG_PATH):
 
 
     new_image_path = os.path.join(PROCESSED_IMG_PATH, image_name)
-    # shutil.move(image_path, new_image_path)
-
-
-from googletrans import Translator
-translator = Translator()
+    shutil.move(image_path, new_image_path)
 
 from googletrans import Translator
 translator = Translator()
