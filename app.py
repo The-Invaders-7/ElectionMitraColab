@@ -4,7 +4,7 @@ import os
 app = Flask(__name__)
 
 
-upload_path = "C:\\Users\\asdha\\Desktop\\EDI-IV\\My Work\\static\\uploaded_files"
+upload_path = ".\\uploaded_files"
 
 @app.route("/")
 def home():
