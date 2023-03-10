@@ -6,14 +6,48 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <style>
+        .screen{
+            height: 100dvh;
+            width: 100%;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form{
+            border: 3px solid black;
+            padding: 10px;
+        }
+
+        label{
+            text-align: center;
+            margin: 10px;
+            font-size: 30px;
+        }
+
+        input{
+            margin: 10px;
+        }
+
+        button{
+            margin: 10px;
+        }
+    </style>
 </head>
 
 <body>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-        <label for="">Submit File Here</label> <br>
-        <input type="file" name="my_file"> <br>
-        <button type="submit" value="Upload">Upload</button> <br>
-    </form>
+    <div class="screen">
+        <div class="form">
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <label for="">Submit File Here</label> <br>
+            <input type="file" name="my_file"> <br>
+            <button type="submit" value="Upload">Upload</button> <br>
+        </form>
+    </div>
+    </div>
 </body>
 
 </html>
