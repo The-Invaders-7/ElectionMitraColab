@@ -10,35 +10,51 @@
     <style>
         .image {
             border: 3px solid black;
-            width: 40%;
+            width: 45%;
             margin: 5px;
             padding: 5px;
+            float: left;
+            height: 275px;
         }
 
         .text {
             border: 3px solid black;
-            width: 40%;
+            width: 45%;
             margin: 5px;
             padding: 5px;
+            float: right;
+            height: 275px;
         }
+
+        img{
+            margin: 45px;
+        }
+
     </style>
 </head>
 
 <body>
 
     {% for i in image %}
+    <div>
+        <tr>
+            <td>
+                <div class="image">
+                    <img src="{{ url_for('static', filename='FILES/CROPPED_IMG') }}/{{i}}" alt="IMG">
+                </div>
+            </td>
 
-    <div class="image">
-        <img src="{{ url_for('static', filename='FILES/CROPPED_IMG') }}/{{i}}" alt="IMG">
+            <td>
+                <div class="text">
+                    {% for line in info[i] %}
+                    <div>{{ line }}</div>
+                    {% endfor %}
+                </div>
+            </td>
+        </tr>
     </div>
-
-    <div class="text">
-        {% for line in info[i] %}
-        <p>{{ line }}</p>
-        {% endfor %}
-    </div>
-
     {% endfor %}
+
 </body>
 
 </html>
