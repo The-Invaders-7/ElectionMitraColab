@@ -40,10 +40,26 @@
 </head>
 
 <body>
+    <h2 class="error">ERROR: 
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{ message }}</p>>
+                {% endfor %} 
+            {% endif %}
+        {% endwith %}
+    </h2>
+
     <div class="screen">
         <div class="form">
         <form action="/upload" method="POST" enctype="multipart/form-data">
-            <label for="">Submit File Here</label> <br>
+            <label for="district" >Enter District:</label>
+            <input type="text" name="pdfDistrict"><br>
+            <label for="city" >Enter City:</label>
+            <input type="text" name="pdfCity"><br>
+            <label for="ward" >Enter Ward:</label>
+            <input type="text" name="pdfWard"><br>
+            <label for="file">Submit File Here</label> <br>
             <input type="file" name="my_file"> <br>
             <button type="submit" value="Upload">Upload</button> <br>
         </form>

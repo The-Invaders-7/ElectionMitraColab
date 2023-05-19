@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/js/sprinkle.js"></script>
+    <script>
+
+        function update_values() {
+            var intervalID = setInterval(update_values, 1000);
+            function update_values() {
+                $.getJSON('http://127.0.0.1:5000/output',
+
+                    function (data) {
+                        $('#result').text(data.result);
+                        console.log(data)
+                    });
+
+            };
+
+            function stopTextColor() {
+                clearInterval(intervalID);
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <h2>HI</h2>
+
+    <body onload="update_values()">
+        <h1>Dynamic Update</h1>
+        <p>
+            <span id="result">?</span>
+            <script>
+                console.log($SCRIPT_ROOT)
+                document.getElementById("result").innerHTML;
+            </script>
+
+            <button onclick="stopTextColor()">Stop</button>
+    </body>
+</body>
+
+</html>
