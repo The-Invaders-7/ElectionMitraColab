@@ -7,6 +7,7 @@ from pdf2image import convert_from_path
 from googletrans import Translator
 import json
 import base64
+import argparse
 from pymongo import MongoClient
 
 CONNECTION_STRING = "mongodb+srv://tanishq777:tanishq777@cluster0.lzgyb.mongodb.net/ElectionMitra?retryWrites=true&w=majority"
@@ -25,9 +26,8 @@ rcParams['figure.figsize'] = 16, 32
 reader = easyocr.Reader(['en'])
 reader_hindi = easyocr.Reader(['hi'])
 
-
 def extract_img_from_pdf():
-    print("[CONVERTING PDF TO IMAGES]")
+    print("converting pdf into images...", end='\n')
     # Store Pdf with convert_from_path function
     for file_name in os.listdir(PROCESSING_PDF_PATH):
         
@@ -38,6 +38,7 @@ def extract_img_from_pdf():
             # Save pages as images in the pdf
             file = file_name.split('.')
             images[i].save(os.path.join(PROCESSING_IMG_PATH, f'{file[0]}_page_{str(i)}.jpeg'), 'JPEG')
+            print(f'Created image {file_name}', end='\n')
 
         # move file to processed folder
         new_file_path = os.path.join(PROCESSED_PDF_PATH, file_name)
@@ -60,8 +61,6 @@ def crop_data_block_from_sheet():
 
         block_width, block_height = image1.width/3, image1.height/10
 
-        print(image_name, block_height, block_width)
-
         for i in range(10):
             for j in range(3):
                 block_img = image1.crop((block_width * j, block_height*i, block_width* (j+1), block_height*(i+1)))
@@ -70,6 +69,7 @@ def crop_data_block_from_sheet():
 
                 block_path = os.path.join(CROPPED_IMG_PATH, f'{img_name[0]}_page_{str(i)}_{str(j)}.jpeg')
                 block_img.save(block_path, "JPEG")
+                print(f"Created image {img_name}", end='\n')
 
 
         new_image_path = os.path.join(PROCESSED_IMG_PATH, image_name)
@@ -104,6 +104,8 @@ def extract_voter_name(filename):
         last_name = data.split(" ")[0]
         first_name = data.split(" ")[1]
         middle_name = ""
+    
+    print(f'Extracted Fist_name: {first_name}, Middle_name: {middle_name}, Last_name: {last_name} from file {filename}', end="\n")
     return last_name, first_name, middle_name
 
 def extract_gender(filename):
@@ -127,7 +129,8 @@ def extract_gender(filename):
         op = reader_hindi.readtext(temp_storage_path)
         print("output: ",op[0][1],end="\n\n")
         data = translator.translate(op[0][1]).text
-        print("output: ",data,end="\n\n")
+        
+        print(f"Extracted Gender: {data} from file: {filename}", end='\n')
         if data == 'PU':
             return "male"
         elif data=='Ms':
@@ -159,6 +162,7 @@ def extract_voter_id(filename):
       st+=(i[1]+" ")
     data = translator.translate(st).text
     voterID = data.split(" ")[1]
+    print(f"Extracted VoterID: {voterID} from file: {filename}", end='\n')
     return voterID
 
 def img_to_base64(filename):
@@ -166,6 +170,7 @@ def img_to_base64(filename):
     # print(block_path, end='\n')
     with open(block_path, "rb") as img_file:
         imageString = base64.b64encode(img_file.read())
+    print(f"Converted {filename} to base64", end='\n')
     return imageString
 
 def extract_data(district, city, ward):
@@ -192,28 +197,37 @@ def extract_data(district, city, ward):
             "lastName" : last_name,
             "gender": voter_gender,
             "voterID" : voter_id,
-            "imageString": str(img_base64)[2:-2],
+            # "imageString": str(img_base64)[2:-2],
             "district":district,
             "city":city,
             "ward":ward
         }
-        print(voter, end="\n\n")
+        print(voter, end="\n")
         # print(img_base64, end="\n")
 
         # voters = c["voters"].find()
-        addVoter.insert_one(voter)
+        print(f"Stored data of {voter_id} to Database", end='\n\n')
+        # addVoter.insert_one(voter)
         # shutil.rmtree(CROPPED_IMG_PATH)
         # shutil.rmtree(TEMP_STORAGE_PATH)
   
+
+
 
 if __name__=="__main__":
     # print(extract_voter_name("trial_page_0_page_0_0"))
     # print(extract_voter_id("trial_page_0_page_0_0"))
     # print(img_to_base64("trial_page_0_page_0_0"))
     # print(extract_gender("trial (1)-pages-4_page_0_page_1_1.jpeg"))
-    print(extract_data("Dpune", "Cpune", "Wpune"))
+    # print(reader_hindi.readtext("C:\\Users\\asdha\Desktop\\EDI-IV\\ElectionMitraColab\\static\\FILES\\TEMP_STORAGE_PATH\\trial (1)-pages-4_page_0_page_1_1_gender.jpeg"))
 
-    # print(reader_hindi.readtext("C:\\Users\\asdha\\Desktop\\EDI-IV\\ElectionMitraColab\\static\\FILES\\TEMP_STORAGE_PATH\\trial (1)-pages-4_page_0_page_1_1_gender.jpeg"))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("district", help="Enter District")
+    parser.add_argument("city", help="Enter City")
+    parser.add_argument("ward", help="Enter Ward")
+    args = parser.parse_args()
+    # print(args.district, args.ward, args.city)
+    extract_data(args.district, args.city, args.ward)
 
 
 # 

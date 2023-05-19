@@ -8,63 +8,130 @@
     <title>Document</title>
 
     <style>
-        .screen{
-            height: 100dvh;
+        body {
+            background-color: rgb(135, 205, 255);
+        }
+
+        .screen {
+            height: 100vh;
             width: 100%;
-            padding: 5px;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
 
-        .form{
-            border: 3px solid black;
-            padding: 10px;
-            border-radius: 10px;
+        .form {
+            background-color: rgb(174, 219, 252);
+            padding: 20px;
+            padding-top: 40px;
+            padding-bottom: 20px;
+            border-radius: 20px;
+            margin: 5px;
+            box-shadow: 10px 10px 10px black;
         }
 
-        label{
+        .error{
+            display: block;
+            background-color: rgb(174, 219, 252);
+            border-radius: 20px;
+            margin: 5px;
             text-align: center;
-            margin: 10px;
+        }
+
+        label {
+            text-align: center;
             font-size: 30px;
         }
 
-        input{
+        button {
             margin: 10px;
         }
 
-        button{
+        .inputField {
+            margin: auto;
+            display: block;
+            border-radius: 10px;
+            border-color: white;
+            padding: 5px;
+            padding-left: 15px;
+            color: black;
+            height: 25px;
+            width: 250px;
+        }
+
+        .button {
+            border-radius: 50px;
+            display: block;
+            margin: auto;
+            color: white;
+            background-color: blue;
+            padding: 5px;
+            font-size: 15px;
+            width: 100px;
+            border: 2px solid black;
+        }
+
+        h3 {
+            height: 25px;
+            width: 300px;
+        }
+
+        .message{
             margin: 10px;
+            color: red;
+        }
+
+        .welcome{
+            text-align: center;
+            color: gray;
+            margin: 5px;
+            width: 330px;
+        }
+
+        .greet{
+            margin: 20px;
         }
     </style>
 </head>
 
 <body>
-    <h2 class="error">ERROR: 
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    <p>{{ message }}</p>>
-                {% endfor %} 
-            {% endif %}
-        {% endwith %}
-    </h2>
+
 
     <div class="screen">
+        <div class="greet">
+            <h2 class="welcome">Welcome to</h2>
+            <h1 class="welcome">Election-Mitra</h1>
+        </div>
+
         <div class="form">
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-            <label for="district" >Enter District:</label>
-            <input type="text" name="pdfDistrict"><br>
-            <label for="city" >Enter City:</label>
-            <input type="text" name="pdfCity"><br>
-            <label for="ward" >Enter Ward:</label>
-            <input type="text" name="pdfWard"><br>
-            <label for="file">Submit File Here</label> <br>
-            <input type="file" name="my_file"> <br>
-            <button type="submit" value="Upload">Upload</button> <br>
-        </form>
+            <h3 style="margin-bottom: 25px;"class="welcome">You Can Upload Documents Here</h3>
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <div><input class="inputField" type="text" placeholder="District" name="pdfDistrict"></div><br>
+                <div><input class="inputField" type="text" placeholder="City" name="pdfCity"></div><br>
+                <div><input class="inputField" type="text" placeholder="Ward" name="pdfWard"></div><br>
+
+                <div>
+                    <label class=" button" for="upload_files">Upload PDF</label>
+                    <input style="display: none;" id="upload_files" type="file" name="my_file"><br>
+                </div>
+                <div><button class=" button" type="submit" value="Upload">Submit</button> <br></div>
+            </form>
+        </div>
+
+            <div class="error">
+                <p>{% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p class="message">{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %} 
+                </p>
+            </div>
     </div>
-    </div>
+
+
 </body>
 
 </html>

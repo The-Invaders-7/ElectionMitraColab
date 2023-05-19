@@ -1,16 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-</head>
-<body>
-    <p>File upload {{state}}</p>
-    <p>File is stored at {{location}}</p>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    
-    <a href="/result"> Let's see the result</a>
+    <style>
+
+        body{
+            background-color: rgb(135, 205, 255);
+        }
+        
+        .screen {
+            height: 100vh;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-items: center;
+            flex-direction: column;
+        }
+
+        .message{
+            margin-top: 30px;
+            display: block;
+            width: 50%;
+            text-align: center;
+            background-color: rgb(174, 219, 252);
+            border-radius: 15px;
+            margin: 10px;
+        }
+
+        .output{
+            background-color: white;
+            width: 70%;
+            padding: 10px;
+            border-radius: 15px;
+            margin: 1px;
+        }
+
+        button {
+            margin: 20px;
+            border-radius: 50px;
+            display: block;
+            color: white;
+            background-color: blue;
+            padding: 7px;
+            font-size: 15px;
+            width: 100px;
+            border: 2px solid black;
+        }
+
+        .welcome{
+            text-align: center;
+            color: gray;
+            margin: 10px;
+            width: 90%;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="screen">
+        <div class="message">
+            <p>File upload {{state}}</p>
+            <p>File is stored at {{location}}</p>
+        </div>
+
+    <h2 class="welcome">Click The Button To Start Execution</h2>
+    <button id="run-btn">Extract Data</button>
+    <pre class="output" id="output">Output:</pre>
+
+    <script type="text/javascript">
+        var socket = io();
+
+        $('#run-btn').click(function() {
+            var command = '{{ command }}';
+            socket.emit('run_command', command);
+        });
+
+        socket.on('output', function(data) {
+            $('#output').append(data.data + '\n');
+            console.log(data.data + '\n')
+        });
+    </script>
+    </div>
+
 </body>
+
 </html>
